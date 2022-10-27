@@ -173,48 +173,131 @@ void display(string *mesa, bool player){
 bool checkapeao(string *mesa, int x1,int y1,int x2, int y2,char cor){
     if(cor == 'b'){
         int diferenca = y1-y2;
-        cout << y1 << '\n';
-        if(diferenca != 1){
-            if(diferenca == 2 && y1 == 7){
-                cout << mesa[x2][y2*2] << ' ' << mesa[x2][(y2-1)*2] << '\n';
-                if(mesa[x2][y2*2] == '.' && mesa[x2][(y2-1)*2] == '.')
-                    return true;
+        int xdif = x1-x2;
+        if(abs(xdif) == 1){
+            if(mesa[x2][y2*2] == 'p')
+                return true;
+            else
+                return false;        
+        }
+        else if(xdif == 0){
+            if(diferenca != 1){
+                if(diferenca == 2 && y1 == 7){
+                    if(mesa[x2][y2*2] == '.' && mesa[x2][(y2-1)*2] == '.')
+                        return true;
+                }
+                return false;
             }
+            if(mesa[x2][y2*2] == '.'){
+                return true;
+            }
+            else return false;
+        }
+        else{
             return false;
         }
-        if(mesa[x2][y2*2] == '.'){
-            cout << mesa[x2][y2*2] << '\n';
-            return true;
-        }
-        else return false;
     }
     else{
         int diferenca = y2-y1;
-        if(diferenca != 1){
-            if(diferenca == 2 && y1 == 2){
-                cout << mesa[x2][y2*2] << ' ' << mesa[x2][(y2-1)*2] << '\n';
-                if(mesa[x2][y2*2] == '.' && mesa[x2][(y2-1)*2] == '.')
-                    return true;
+        int xdif = x1-x2;
+        if(abs(xdif) == 1){
+            if(mesa[x2][y2*2] == 'b')
+                return true;
+            else
+                return false;   
+        }
+        else if(xdif == 0){
+            if(diferenca != 1){
+                if(diferenca == 2 && y1 == 2){
+                    if(mesa[x2][y2*2] == '.' && mesa[x2][(y2-1)*2] == '.')
+                        return true;
+                }
+                return false;
             }
+            if(mesa[x2][y2*2] == '.'){
+                return true;
+            }
+            else return false;
+        }
+        else{
             return false;
         }
-        if(mesa[x2][y2*2] == '.'){
-            cout << mesa[x2][y2*2] << '\n';
-            return true;
-        }
-        else return false;
-
-        //falta verificar se diagonalizado ele consegue se mexer!
     }
 }
 bool checktorre(string *mesa, int x1,int y1,int x2, int y2,char cor){
-    return true;
+    int xdif = abs(x1-x2);
+    int ydif = abs(y1-y2);
+    if(xdif && ydif || xdif == ydif)
+        return false;
+    else{
+        bool error = false;
+        if(x1 > x2){
+            //vai estar subindo
+            for(int i = 1;i<=xdif;i++){
+                if(mesa[x1-i][y2*2] != '.' && i != xdif){
+                    error = true;
+                }
+                else if(i == xdif){
+                    if(cor == mesa[x1-i][y2*2])
+                        error = true;
+                }
+            }
+        }
+        else if(y1 > y2){
+            //vai estar indo para ESQUERDA
+            for(int i = 1;i<=ydif;i++){
+                if(mesa[x1][y1*2-i*2] != '.' && i != ydif){
+                    error = true;
+                }
+                else if(i == ydif){
+                    if(cor == mesa[x1][y1*2-i*2])
+                        error = true;
+                }
+            }
+        }
+        else if(x2 > x1){
+            //vai estar descendo
+            for(int i = 1;i<=xdif;i++){
+                if(mesa[x1+i][y2*2] != '.' && i != xdif){
+                    error = true;
+                }
+                else if(i == xdif){
+                    if(cor == mesa[x1+i][y2*2])
+                        error = true;
+                }
+            }
+        }
+        else{
+            //vai estar indo para DIREITA
+            for(int i = 1;i<=ydif;i++){
+                if(mesa[x1][y1*2+i*2] != '.' && i != ydif){
+                    error = true;
+                }
+                else if(i == ydif){
+                    if(cor == mesa[x1][y1*2+i*2])
+                        error = true;
+                }
+            }
+        }
+        if(error)
+            return false;
+        else
+            return true;
+    }
+
 }
 bool checkcavalo(string *mesa, int x1,int y1,int x2, int y2,char cor){
     return true;
 }
 bool checkbispo(string *mesa, int x1,int y1,int x2, int y2,char cor){
-    return true;
+    int xdif = abs(x1-x2);
+    int ydif = abs(y1-y2);
+    if(xdif != ydif || (xdif == 0 && ydif == 0)){
+        return false;
+    }   
+    else{
+        //FALTA O BISPO
+    }
 }
 bool checkrainha(string *mesa, int x1,int y1,int x2, int y2,char cor){
     return true;

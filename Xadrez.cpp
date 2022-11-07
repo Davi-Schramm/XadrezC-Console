@@ -16,7 +16,7 @@ int main(){
     string mesa[100];
     bool game = true;
     mesaprepare(mesa);
-    //menu();
+    menu();
     bool jogadoronoff = false;
     while(game){
         display(mesa, jogadoronoff);
@@ -169,7 +169,6 @@ void display(string *mesa, bool player){
         }
     }
 }
-
 bool checkapeao(string *mesa, int x1,int y1,int x2, int y2,char cor){
     if(cor == 'b'){
         int diferenca = y1-y2;
@@ -287,7 +286,16 @@ bool checktorre(string *mesa, int x1,int y1,int x2, int y2,char cor){
 
 }
 bool checkcavalo(string *mesa, int x1,int y1,int x2, int y2,char cor){
-    return true;
+    int xdif = abs(x1-x2);
+    int ydif = abs(y1-y2);
+    if(!xdif && !ydif || (xdif == 1 && ydif != 2) || (ydif == 1 && xdif != 2) || (xdif != 1 && ydif != 1))
+        return false;
+    else{
+        if(mesa[x2][y2*2] != cor)
+            return true;
+        else
+            return false;
+    }
 }
 bool checkbispo(string *mesa, int x1,int y1,int x2, int y2,char cor){
     int xdif = abs(x1-x2);
@@ -296,16 +304,98 @@ bool checkbispo(string *mesa, int x1,int y1,int x2, int y2,char cor){
         return false;
     }   
     else{
-        //FALTA O BISPO
+        if(x1 > x2 && y1 > y2){
+            for(int i = 1;i<=xdif;i++){
+                if(mesa[x1-i][y1*2-i*2] != '.' && i != xdif){
+                    return false;
+                }
+                else if(i == xdif){
+                    if(i == xdif && mesa[x1-i][y1*2-i*2] != cor)
+                        return true;
+                    else
+                        return false;
+                }
+            }
+        }
+        else if(x1 > x2 && y1 < y2){
+            for(int i = 1;i<=xdif;i++){
+                if(mesa[x1-i][y1*2+i*2] != '.' && i != xdif){
+                    return false;
+                }
+                else if(i == xdif){
+                    if(i == xdif && mesa[x1-i][y1*2+i*2] != cor)
+                        return true;
+                    else
+                        return false;
+                }
+            }
+        }
+        else if(x1 < x2 && y1 > y2){
+            for(int i = 1;i<=xdif;i++){
+                if(mesa[x1+i][y1*2-i*2] != '.' && i != xdif){
+                    return false;
+                }
+                else if(i == xdif){
+                    if(i == xdif && mesa[x1+i][y1*2-i*2] != cor)
+                        return true;
+                    else
+                        return false;
+                }
+            }
+        }
+        else if(x1 < x2 && y1 < y2){
+            for(int i = 1;i<=xdif;i++){
+                if(mesa[x1+i][y1*2+i*2] != '.' && i != xdif){
+                    return false;
+                }
+                else if(i == xdif){
+                    if(i == xdif && mesa[x1+i][y1*2+i*2] != cor)
+                        return true;
+                    else
+                        return false;
+                }
+            }
+        }
     }
 }
 bool checkrainha(string *mesa, int x1,int y1,int x2, int y2,char cor){
-    return true;
+    int xdif = abs(x1-x2);
+    int ydif = abs(y1-y2);
+    if(xdif == 0 && ydif == 0)
+        return false;
+    else if(xdif != ydif){
+        if(xdif > 0 && ydif > 0)
+            return false;
+        else if(xdif == ydif){
+            checkbispo(mesa,x1,y1,x2,y2,cor);
+        }
+        else{
+            checktorre(mesa,x1,y1,x2,y2,cor);
+        }
+    }
+    else{
+        if(xdif == ydif){
+            checkbispo(mesa,x1,y1,x2,y2,cor);
+        }
+        else{
+            checktorre(mesa,x1,y1,x2,y2,cor);
+        }
+    }
+
+
 }
 bool checkrei(string *mesa, int x1,int y1,int x2, int y2,char cor){
-    return true;
+    int xdif = abs(x1-x2);
+    int ydif = abs(y1-y2);
+    if(xdif > 1 || ydif > 1)
+        return false;
+    else{
+        if(mesa[x2][y2*2] != cor)
+            return true;
+        else
+            return false;
+    }
 }
-
 void mesaprepare(string *mesa){
     
         for(int i = 0;i<10;i++){
